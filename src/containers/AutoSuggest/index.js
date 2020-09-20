@@ -21,7 +21,8 @@ const dataSet = [
     { "Name": "Poland", "Code": "PL" },
     { "Name": "Switzerland", "Code": "CH" },
     { "Name": "United Kingdom", "Code": "GB" },
-    { "Name": "United States", "Code": "US" }
+    { "Name": "United States", "Code": "US" },
+    { "Name": "Sri Lanka", "Code": "SL" }
 ];
 
 
@@ -79,16 +80,16 @@ export default class AutoSuggest extends Component {
         this.setState({ selectedSuggestion: remainingArray });
     }
 
-    debounceMethod = () => {
-        let timer;
-        return function cb(...args) {
-            const self = this;
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                self.onChange(self, ...args);
-            }, 300);
-        }
-    }
+    // debounceMethod = () => {
+    //     let timer;
+    //     return function cb(...args) {
+    //         const self = this;
+    //         clearTimeout(timer);
+    //         timer = setTimeout(() => {
+    //             self.onChange(self, ...args);
+    //         }, 300);
+    //     }
+    // }
 
     render() {
 
@@ -98,7 +99,7 @@ export default class AutoSuggest extends Component {
             <div>
                 <div>
                     <div>
-                        <input onChange={(event) => this.debounceMethod()(event)} />
+                        <input onChange={(event) => this.onChange(event)} />
                         <div>
                             {
                                 selectedSuggestion.length > 0 &&
