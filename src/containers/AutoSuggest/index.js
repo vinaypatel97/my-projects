@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FilteredData from './FilteredData';
+import { debounce } from '../../utils/debounce';
 import './main.css';
 
 const dataSet = [
@@ -35,12 +36,12 @@ export default class AutoSuggest extends Component {
             selectedSuggestion: [],
         }
         this.timer = null;
+        this.onChange = debounce(this.onChange, 500);
     }
 
-    onChange = (event) => {
-        console.log('event: ', event, event.target);
+    onChange = (value) => {
         const { selectedSuggestion } = this.state;
-        const text = event.target.value;
+        const text = value;
         let suggestions = [];
 
         if (text === '') {
@@ -80,17 +81,6 @@ export default class AutoSuggest extends Component {
         this.setState({ selectedSuggestion: remainingArray });
     }
 
-    // debounceMethod = () => {
-    //     let timer;
-    //     return function cb(...args) {
-    //         const self = this;
-    //         clearTimeout(timer);
-    //         timer = setTimeout(() => {
-    //             self.onChange(self, ...args);
-    //         }, 300);
-    //     }
-    // }
-
     render() {
 
         const { suggestions, selectedSuggestion } = this.state;
@@ -99,7 +89,7 @@ export default class AutoSuggest extends Component {
             <div>
                 <div>
                     <div>
-                        <input onChange={(event) => this.onChange(event)} />
+                        <input onChange={(event) => this.onChange(event.target.value)} />
                         <div>
                             {
                                 selectedSuggestion.length > 0 &&
