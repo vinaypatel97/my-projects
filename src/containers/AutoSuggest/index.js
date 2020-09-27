@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FilteredData from './FilteredData';
 import { debounce } from '../../utils/debounce';
+import { memoize } from '../../utils/memoize';
 import './main.css';
 
 const dataSet = [
@@ -37,10 +38,10 @@ export default class AutoSuggest extends Component {
         }
         this.timer = null;
         this.onChange = debounce(this.onChange, 500);
+        this.findSuggestions = memoize(this.findSuggestions)
     }
 
     onChange = (value) => {
-        const { selectedSuggestion } = this.state;
         const text = value;
         let suggestions = [];
 
@@ -49,15 +50,22 @@ export default class AutoSuggest extends Component {
             return;
         }
 
+        const results = this.findSuggestions(suggestions, text);
+        this.setState({ suggestions: results });
+    }
+
+    findSuggestions = (suggestions, text) => {
+
+        const { selectedSuggestion } = this.state;
+
         dataSet.forEach((elm) => {
             const countryName = elm.Name.toLowerCase();
             if (countryName.includes(text.toLowerCase()) && !selectedSuggestion.includes(elm.Name)) {
                 suggestions.push(elm.Name);
             }
         });
-        this.setState({
-            suggestions
-        });
+
+        return suggestions;
     }
 
     updateSelectedSuggestions = (suggestion) => {
