@@ -2,6 +2,12 @@ import React from 'react';
 
 function FilteredData(props) {
 
+    const newChilds = props.children.map((elm) => {
+        return React.cloneElement(elm, { className: 'removeBtn', onClick: () => {
+            console.log('clicked');
+        } })
+    })
+
     const { suggestions, updateSelectedSuggestions } = props;
 
     return (
@@ -13,6 +19,8 @@ function FilteredData(props) {
                     )
                 })
             }
+            {props.children}
+            {newChilds}
         </div>
     )
 }

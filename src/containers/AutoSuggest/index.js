@@ -38,7 +38,8 @@ export default class AutoSuggest extends Component {
         }
         this.timer = null;
         this.onChange = debounce(this.onChange, 500);
-        this.findSuggestions = memoize(this.findSuggestions)
+        this.findSuggestions = memoize(this.findSuggestions);
+        this.input = React.createRef();
     }
 
     onChange = (value) => {
@@ -89,15 +90,18 @@ export default class AutoSuggest extends Component {
         this.setState({ selectedSuggestion: remainingArray });
     }
 
+    inputFocus = () => {
+        this.input.current.focus();
+    }
+
     render() {
 
         const { suggestions, selectedSuggestion } = this.state;
 
         return (
-            <div>
-                <div>
+                <>
                     <div>
-                        <input onChange={(event) => this.onChange(event.target.value)} />
+                        <input onChange={(event) => this.onChange(event.target.value)} ref={this.input} />
                         <div>
                             {
                                 selectedSuggestion.length > 0 &&
@@ -113,12 +117,20 @@ export default class AutoSuggest extends Component {
                         </div>
 
                     </div>
+                    <div>
+                        <button onClick={this.inputFocus}>Click Me to Focus</button>
+                    </div>
                     <FilteredData
                         suggestions={suggestions}
                         updateSelectedSuggestions={this.updateSelectedSuggestions}
-                    />
-                </div>
-            </div>
+                    >
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </FilteredData>
+                </>
         )
     }
 }
